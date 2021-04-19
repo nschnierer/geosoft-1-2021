@@ -1,0 +1,26 @@
+{
+  "name": "geosoft-1-2021",
+  "version": "1.0.0",
+  "description": "Geosoftware I SS 2021",
+  "author": "Noel Schnierer <noel.schnierer@wwu.de>",
+  "license": "UNLICENSED",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint src/**/*.js",
+    "start": "npm-run-all --parallel build:watch webserver",
+    "webserver": "live-server",
+    "build:watch": "npm run build -- --watch",
+    "build": "esbuild ./src/index.js --outfile=./build/bundle.js --bundle --sourcemap --target=chrome58,firefox57,safari11,edge16",
+    "format": "prettier --write '**/*.md' '**/*.json' '**/*.js' '**/*.css'"
+  },
+  "devDependencies": {
+    "esbuild": "^0.11.12",
+    "eslint": "^7.24.0",
+    "live-server": "^1.2.1",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^2.2.1"
+  },
+  "dependencies": {
+    "modern-normalize": "^1.0.0"
+  }
+}

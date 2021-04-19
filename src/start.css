@@ -1,0 +1,8 @@
+.start table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.start table tr th {
+  text-align: left;
+  background-color: var(--color-gray-400);
+}

@@ -1,0 +1,10 @@
+/*
+ * Normalize browser's default style
+ * See: https://github.com/sindresorhus/modern-normalize 
+ */
+@import "../node_modules/modern-normalize/modern-normalize.css";
+
+:root {
+  --color-white: #ffffff;
+  --color-gray-400: #d1d5db;
+}
