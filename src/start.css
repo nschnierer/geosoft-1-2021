@@ -1,8 +1,38 @@
+.start h1 {
+  color: var(--color-teal-600);
+}
+
 .start table {
   width: 100%;
   border-collapse: collapse;
+  background: rgba(0, 0, 0, 0);
+  box-shadow: var(--shadow-sm);
 }
+
 .start table tr th {
+  font-weight: 500;
   text-align: left;
-  background-color: var(--color-gray-400);
+  background-color: var(--color-teal-900);
+  padding: var(--spacing-2);
+  color: var(--color-teal-500);
+}
+
+.start table tr td {
+  text-align: left;
+  color: var(--color-teal-500);
+  padding: var(--spacing-2);
+  background-color: var(--color-gray-700);
+}
+
+.start table tr:first-child th:first-child {
+  border-top-left-radius: var(--border-radius-sm);
+}
+.start table tr:first-child th:last-child {
+  border-top-right-radius: var(--border-radius-sm);
+}
+.start table tr:last-child td:first-child {
+  border-bottom-left-radius: var(--border-radius-sm);
+}
+.start table tr:last-child td:last-child {
+  border-bottom-right-radius: var(--border-radius-sm);
 }
