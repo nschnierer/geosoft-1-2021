@@ -8,9 +8,11 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint src/**/*.js",
     "start": "npm-run-all --parallel build:watch webserver",
-    "webserver": "live-server",
-    "build:watch": "npm run build -- --watch",
-    "build": "esbuild ./src/index.js --outfile=./build/bundle.js --bundle --sourcemap --target=chrome58,firefox57,safari11,edge16",
+    "webserver": "live-server dist/",
+    "build:prepare": "rm -rf dist && mkdir dist && cp -r public/* dist/",
+    "build:esbuild": "esbuild src/index.js --outfile=dist/static/bundle.js --bundle --sourcemap --target=chrome58,firefox57,safari11,edge16",
+    "build:watch": "npm run build:prepare && npm run build:esbuild -- --watch",
+    "build": "npm run build:prepare && npm run build:esbuild -- --minify",
     "format": "prettier --write '**/*.md' '**/*.json' '**/*.js' '**/*.css'"
   },
   "devDependencies": {
