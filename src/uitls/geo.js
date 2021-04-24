@@ -33,7 +33,7 @@ export function getDistanceFromLonLatInKm([lon1, lat1], [lon2, lat2]) {
  * Checks if a point is in a given rect.
  * Source: https://stackoverflow.com/questions/22521982/check-if-point-is-inside-a-polygon
  * @param {[number, number]} point `[longitude, latitude]`
- * @param {[[number, number],[number, number],[number, number],[number, number]]} polygon `[[longitude, latitude], ...]`
+ * @param {[number, number][]} polygon `[[longitude, latitude], ...]`
  * @returns {boolean}
  */
 export function isLonLatInPolygon([lng, lat], polygon) {
