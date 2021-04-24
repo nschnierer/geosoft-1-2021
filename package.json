@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "Geosoftware I SS 2021",
   "author": "Noel Schnierer <noel.schnierer@wwu.de>",
-  "license": "UNLICENSED",
   "scripts": {
     "test": "jest src",
     "test:watch": "npm test -- --watch",
