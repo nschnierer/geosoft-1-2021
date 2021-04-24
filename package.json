@@ -7,7 +7,7 @@
   "scripts": {
     "test": "jest src",
     "test:watch": "npm test -- --watch",
-    "lint": "eslint src/**/*.js",
+    "lint": "eslint src/",
     "start": "npm-run-all --parallel build:watch webserver",
     "webserver": "live-server dist/",
     "build:prepare": "rm -rf dist && mkdir dist && cp -r public/* dist/",
@@ -17,7 +17,7 @@
     "format": "prettier --write '**/*.md' '**/*.json' '**/*.js' '**/*.css'"
   },
   "devDependencies": {
-    "esbuild": "^0.11.12",
+    "esbuild": "^0.11.14",
     "esbuild-jest": "^0.5.0",
     "eslint": "^7.24.0",
     "jest": "^26.6.3",
@@ -34,7 +34,7 @@
       "js"
     ],
     "transform": {
-      "^.+\\.js$": "esbuild-jest"
+      "^.+\\.(js|css)$": "esbuild-jest"
     }
   }
 }
