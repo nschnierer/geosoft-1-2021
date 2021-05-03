@@ -1,5 +1,5 @@
 import { cutLineStringByPolygon } from "./utils/geo";
-import { transformToGeoJSONFeature } from "./utils/geo-json";
+import { isGeoJSONFeature, transformToGeoJSONFeature } from "./utils/geo-json";
 import * as assets from "./assets";
 import "./start.css";
 
@@ -15,18 +15,62 @@ export default class Start {
     this.root = document.createElement("div");
     this.root.className += "start";
 
-    this.showInitialRoutes();
+    // add buttons in constructor to use event listener
+    this.calculateButton = document.createElement("button");
+    this.calculateButton.type = "button";
+    this.calculateButton.className = "btn-primary";
+    this.calculateButton.textContent = "Calculate";
+    this.calculateButton.addEventListener(
+      "click",
+      this.addCustomLineString.bind(this)
+    );
+
+    this.resetButton = document.createElement("button");
+    this.resetButton.type = "button";
+    this.resetButton.className = "btn-subtle";
+    this.resetButton.textContent = "Reset";
+    this.resetButton.addEventListener("click", this.resetLineString.bind(this));
+
+    // load default LineString and Polygon
+    this.lineString = transformToGeoJSONFeature("LineString", assets.route);
+    this.polygon = transformToGeoJSONFeature("Polygon", assets.polygon);
+
+    this.calculateRows();
 
     return this.root;
   }
 
-  showInitialRoutes() {
-    // transform given coordinates to GeoJSON:
-    const lineString = transformToGeoJSONFeature("LineString", assets.route);
-    const polygon = transformToGeoJSONFeature("LineString", assets.polygon);
-    // Calculate rows
-    this.rows = cutLineStringByPolygon(lineString, polygon);
+  addCustomLineString() {
+    let lineString = "";
+    try {
+      lineString = JSON.parse(this.root.querySelector("#geoJSON").value);
+    } catch (err) {
+      console.error(err);
+      alert("Invalid JSON!");
+      return;
+    }
 
+    if (!isGeoJSONFeature(lineString)) {
+      alert("Invalid GeoJSON!");
+      return;
+    }
+
+    if (lineString.geometry.type !== "LineString") {
+      alert("Please add a LineString geometry!");
+      return;
+    }
+
+    this.lineString = lineString;
+    this.calculateRows();
+  }
+
+  resetLineString() {
+    this.lineString = transformToGeoJSONFeature("LineString", assets.route);
+    this.calculateRows();
+  }
+
+  calculateRows() {
+    this.rows = cutLineStringByPolygon(this.lineString, this.polygon);
     this.render();
   }
 
@@ -55,6 +99,20 @@ export default class Start {
     // However in that case it doesn't matter.
     this.root.innerHTML = `
       <h1>Geosoftware I SS 2021</h1>
+      <div>
+        <textarea class="textarea" id="geoJSON">${JSON.stringify(
+          this.lineString,
+          null,
+          // format JSON
+          2
+        )}</textarea>
+      </div>
+      <br />
+      <div style="text-align: right;">
+        <span id="reset"></span>
+        <span id="addCustomLineString"></span>
+      </div>
+      <br />
       <br />
       <table>
         <thead>
@@ -86,14 +144,27 @@ export default class Start {
           <tr>
             <td>Total</td>
             <td>${distanceTotal.toFixed(3)}</td>
-            <td>FeatureCollection&nbsp; <button class="btn-subtle" onclick='navigator.clipboard.writeText("${stringifyEscaped(
-              featureCollection
-            )}")'>Copy</button></td>
+            <td>
+              FeatureCollection&nbsp;
+              <button
+                class="btn-subtle"
+                onclick='navigator.clipboard.writeText("${stringifyEscaped(
+                  featureCollection
+                )}")'
+              >
+                Copy
+              </button>
+            </td>
           </tr>
         </tfoot>
       </table>
       <br />
       <div id="button"></div>
     `;
+
+    this.root
+      .querySelector("#addCustomLineString")
+      .append(this.calculateButton);
+    this.root.querySelector("#reset").append(this.resetButton);
   }
 }
