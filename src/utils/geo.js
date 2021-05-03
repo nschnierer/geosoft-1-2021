@@ -1,3 +1,5 @@
+import { transformToGeoJSONFeature } from "./geo-json";
+
 /**
  * Converts from degrees to radians.
  * @param {number} deg
@@ -52,3 +54,67 @@ export function isLonLatInPolygon([lng, lat], polygon) {
   }
   return inside;
 }
+
+/**
+ * @typedef GeoJSON
+ * @type {object}
+ * @property {string} type
+ * @property {object} geometry
+ * @property {string} geometry.type
+ * @property {[number, number][]} geometry.coordinates `[[longitude, latitude],...]`
+ */
+
+/**
+ * Cuts the given line string into multiple sections by polygon.
+ * @param {GeoJSON} lineString GeoJSON with geometry type LineString
+ * @param {GeoJSON} polygon GeoJSON with geometry type Polygon
+ * @returns {{ label: string, distance: number, section: GeoJSON }[]}
+ */
+export const cutLineStringByPolygon = (lineString, polygon) => {
+  let prevIsInside;
+  let sections = [];
+  let section = [];
+
+  lineString.geometry.coordinates.forEach((lonLat) => {
+    const currIsInside = isLonLatInPolygon(
+      lonLat,
+      polygon.geometry.coordinates
+    );
+
+    if (prevIsInside === undefined) {
+      // handling the first element
+      prevIsInside = currIsInside;
+    }
+
+    if (prevIsInside !== currIsInside) {
+      // Cutting the section because the current lon/lat
+      // is inside or outside of the polygon in comparison of the previous lon/lat.
+      sections.push(section);
+      section = [];
+    }
+    section.push(lonLat);
+    prevIsInside = currIsInside;
+  });
+
+  // pushing the last section
+  if (section.length > 0) {
+    sections.push(section);
+  }
+
+  // Calculate the distance for each section
+  // TODO: This logic could be extracted into `utils`, if it's also used some were else.
+  const result = sections.map((section, key) => {
+    let distance = 0;
+    for (let i = 0; i < section.length - 1; i += 1) {
+      distance += getDistanceFromLonLatInKm(section[i], section[i + 1]);
+    }
+    // Adding a label based on the array key
+    return {
+      label: `${key + 1}`,
+      distance,
+      section: transformToGeoJSONFeature("LineString", section),
+    };
+  });
+
+  return result;
+};
