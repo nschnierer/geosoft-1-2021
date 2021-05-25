@@ -24,3 +24,5 @@ npm run build
 ```
 
 It generates a production ready (minified `.js` and `.css`) website in `dist/`.
+
+> NOTE: Add your own openweathermap.com API to `src/MarkerWeather.tsx`.
