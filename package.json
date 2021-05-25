@@ -10,7 +10,7 @@
     "start": "npm-run-all --parallel build:watch webserver",
     "webserver": "live-server dist/",
     "build:prepare": "rm -rf dist && mkdir dist && cp -r public/* dist/",
-    "build:esbuild": "esbuild src/index.js --outfile=dist/static/bundle.js --bundle --sourcemap --target=chrome58,firefox57,safari11,edge18",
+    "build:esbuild": "esbuild src/index.jsx --outfile=dist/static/bundle.js --bundle --sourcemap --target=chrome58,firefox57,safari11,edge18",
     "build:watch": "npm run build:prepare && npm run build:esbuild -- --watch",
     "build": "npm run build:prepare && npm run build:esbuild -- --minify",
     "format": "prettier --write '**/*.md' '**/*.json' '**/*.js' '**/*.css'"
@@ -19,13 +19,16 @@
     "esbuild": "^0.11.14",
     "esbuild-jest": "^0.5.0",
     "eslint": "^7.24.0",
+    "eslint-plugin-react": "^7.23.2",
     "jest": "^26.6.3",
     "live-server": "^1.2.1",
     "npm-run-all": "^4.1.5",
     "prettier": "^2.2.1"
   },
   "dependencies": {
-    "modern-normalize": "^1.0.0"
+    "modern-normalize": "^1.0.0",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
   },
   "jest": {
     "rootDir": "src",

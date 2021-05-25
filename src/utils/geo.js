@@ -75,6 +75,8 @@ export const cutLineStringByPolygon = (lineString, polygon) => {
   let sections = [];
   let section = [];
 
+  console.log(polygon);
+
   lineString.geometry.coordinates.forEach((lonLat) => {
     const currIsInside = isLonLatInPolygon(
       lonLat,
