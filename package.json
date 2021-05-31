@@ -7,13 +7,16 @@
     "test": "jest src",
     "test:watch": "npm test -- --watch",
     "lint": "eslint src/",
-    "start": "npm-run-all --parallel build:watch webserver",
+    "start": "npm run build:tailwind:dev && npm-run-all --parallel build:watch webserver",
     "webserver": "live-server dist/",
     "build:prepare": "rm -rf dist && mkdir dist && cp -r public/* dist/",
     "build:esbuild": "esbuild src/index.jsx --outfile=dist/static/bundle.js --bundle --sourcemap --target=chrome58,firefox57,safari11,edge18",
     "build:watch": "npm run build:prepare && npm run build:esbuild -- --watch",
-    "build": "npm run build:prepare && npm run build:esbuild -- --minify",
-    "format": "prettier --write '**/*.md' '**/*.json' '**/*.js' '**/*.css'"
+    "build:tailwind:dev": "tailwindcss-cli build -o src/tailwind.generated.css",
+    "build:tailwind:prod": "tailwindcss-cli build -c tailwind.config.production.js -o src/tailwind.generated.css",
+    "build": "NODE_ENV=production npm run build:prepare && npm run build:tailwind:prod && npm run build:esbuild -- --minify",
+    "format": "prettier --write '**/*.md' '**/*.json' '**/*.js' '**/*.css'",
+    "tailwind": "tailwindcss-cli help build"
   },
   "devDependencies": {
     "esbuild": "^0.11.14",
@@ -23,12 +26,14 @@
     "jest": "^26.6.3",
     "live-server": "^1.2.1",
     "npm-run-all": "^4.1.5",
-    "prettier": "^2.2.1"
+    "prettier": "^2.2.1",
+    "tailwindcss-cli": "^0.1.2"
   },
   "dependencies": {
     "modern-normalize": "^1.0.0",
     "react": "^17.0.2",
-    "react-dom": "^17.0.2"
+    "react-dom": "^17.0.2",
+    "react-router-dom": "^5.2.0"
   },
   "jest": {
     "rootDir": "src",
